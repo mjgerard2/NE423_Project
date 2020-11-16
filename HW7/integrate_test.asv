@@ -1,0 +1,4 @@
+x = 0:0.01:pi*2 ;
+F = cos(x) ;
+plot(x, F)
+int = trapz_integral(F, 0.01)

@@ -20,9 +20,9 @@ Q_max = LHR/(pi*r_f^2) ; % LHR = Q*pi*r_f^2 [W/m^3]
 
 % radial grid
 %Number of Grid Points in Each Region
-Nfs = [10 , 20, 40 , 50];
-Ngs = [10 , 20, 30 , 40];
-Ncs = [10 , 15, 20 , 30];
+Nfs = [45];
+Ngs = [35];
+Ncs = [25];
 
 %step sizes between grid points
 % h_f = r_f ./ (Nfs - 1) ;
@@ -32,7 +32,8 @@ Ncs = [10 , 15, 20 , 30];
 % axial grid
 H = 4; % m
 % Number of Grid Points in the z direction, use odd number
-Ms = [11, 21 , 31 , 41];
+%Ms = [11, 21 , 31 , 41];
+Ms = [35];
 dzs = H./(Ms-1);
 mdot = 0.25 ;% kg/s
 CPW = 4200 ;% J/kg-K
@@ -57,6 +58,15 @@ for k = 1:length(Nfs) %currently ends line 97, change? %channging to end at
     % make a colormap
     [R , Z] = meshgrid(r,z);
     figure(k);surf(R,Z,temp_2D_mesh')
-    view(2)
+    view(2);
+    
+    xlabel('R [m]')
+    ylabel('Z [m]')
+    
+    idx = int2str(Nfs(k));
+    title(['Temperature Plot : Grid Size ', idx])
+    colorbar('EastOutside')
+    
+    saveas(figure(k),['TempPlot_Grid_', idx]);
 end
 
