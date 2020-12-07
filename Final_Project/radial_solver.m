@@ -1,4 +1,4 @@
-function [T, r] = radial_solver(Q,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc)
+function [T, r] = radial_solver(Q,LHR,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc)
     % This function computes the radial temperature profile for the given set
     % of parameters in the function call
     % The output is the tempreature at each radial node and the radial grid
@@ -8,14 +8,14 @@ function [T, r] = radial_solver(Q,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc)
     hg = (r_g-r_f)/(Ng-1) ;
     hc = (r_c-r_g)/(Nc-1) ;
     N = Nf+Ng+Nc-2 ;
-    LHR = Q*pi*r_f^2;
+    %LHR = Q*pi*r_f^2;
     %radial mesh
     r = unique([(0:hf:r_f),(r_f:hg:r_g), (r_g:hc:r_c)]') ;
     %initializing bvec
     bvec = zeros(N, 1) ;
     % RHS of FD conduction equation, AT=b
     % condition at r=0, Neumann BC
-    bvec(1,1) = - hf^2/(2*k_f)*Q ;
+    bvec(1,1) = - hf^2/(2*k_f)*Q(1) ;
     
     count = 1; % counter for sparse matrix formulation
     % Neumann Boundary, r=0
@@ -37,7 +37,7 @@ function [T, r] = radial_solver(Q,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc)
         count = count + 1 ;
     end
     % heat generation in the fuel
-    bvec(2: Nf-1,1) = - Q * r(2:Nf-1) ;
+    bvec(2: Nf-1,1) = - Q(2:Nf-1) * r(2:Nf-1) ;
     
     %Continuity of Heat Flux Boundary Condition (fuel to gap)
     ivec(count) = Nf ; jvec(count) = Nf  ; avec(count) =  -1;

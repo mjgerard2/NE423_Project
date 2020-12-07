@@ -19,10 +19,11 @@ Lm = sqrt(Dm / SigM); %[cm]
 S0 = 1.01916e11; %[cm^-3 s^-1]
 
 r_dom = [0:0.001:Rf];
-Q = zeros(length(r_dom));
-for i = 1:length(r_dom)
-    Q(i) = rad_heat_gen(r_dom(i), Qscl, H, Rf, Rm, Dm, Df, Lf, Lm, S0);
-end
+Q = rad_heat_gen(r_dom, Qscl, H, Rf, Rm, Dm, Df, Lf, Lm, S0);
+% Q = zeros(length(r_dom));
+% for i = 1:length(r_dom)
+%     Q(i) = rad_heat_gen(r_dom(i), Qscl, H, Rf, Rm, Dm, Df, Lf, Lm, S0);
+% end
 
 plot(r_dom, Q)
 axis([0,Rf,580,592])

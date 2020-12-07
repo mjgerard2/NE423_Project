@@ -1,4 +1,4 @@
-load('fine_mesh_HW7');
+load('FINAL_mainTEX');
 
 % Scale radial direction to milimeters and set plotting font size
 r_scl = r * 1000;
@@ -77,6 +77,6 @@ a = colorbar('EastOutside');
 a.Label.String = 'Temperature [K]';
 a.Label.FontSize = fnt;
 
-saveas(figure(1),'Radial_Stress');
-saveas(figure(2),'Hoop_Stress');
-saveas(figure(3),'Temp_Plot');
+saveas(figure(1),'Radial_Stress_mainTEX');
+saveas(figure(2),'Hoop_Stress_mainTEX');
+saveas(figure(3),'Temp_Plot_mainTEX');

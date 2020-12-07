@@ -15,32 +15,55 @@ k_c = 17; %[W/m-K]
 k_g = .25; %[W/m-K]
 T_cool = 570; % [K]
 h_cool = 25000 ; % [W/m^2*K]
-% LHR = 20000 ; %[W/m]
-% Q_max = LHR/(pi*r_f^2) ; % LHR = Q*pi*r_f^2 [W/m^3]
+LHR = 20000 ; %[W/m]
+Q_max = LHR/(pi*r_f^2) ; % LHR = Q*pi*r_f^2 [W/m^3]
 
 % radial grid
 %Number of Grid Points in Each Region
-Nf = 65;
-Ng = 35;
-Nc = 35;
+Nf = 15; %65;
+Ng = 5; %35;
+Nc = 5; %35;
 
 % axial grid
 H = 4; % m
 % Number of Grid Points in the z direction, use odd number
-M = 65;
+M = 15; %65;
 dz = H./(M-1);
 mdot = 0.25 ;% kg/s
 CPW = 4200 ;% J/kg-K
 
+% Radial Heat Generation
+SigF = 16.9; %[m^-1]
+SigM = 2.2; %[m^-1]
+
+D_f = .0062; %[m]
+D_m = 0.00143; %[m]
+
+L_f = sqrt(D_f / SigF); %[m]
+L_m = sqrt(D_m / SigM); %[m]
+
+r_m = 0.0063; %[m]
+
+% main.tex method
+%S_0 = 1.01916e17; %[cm^-3 s^-1]
+% scratch_work.tex method
+S_0 = 3.20179e17; %1.01916e17; %[m^-3 s^-1]
+
+Q_scl = 1.304e-7; %[J/m] 
+
+r_dom = linspace(0, r_f, Nf);
+Q_vec = rad_heat_gen(r_dom,Q_scl,H,r_f,r_m,D_m,D_f,L_f,L_m,S_0);
+
+% Finite Difference Driver
 N = Nf+Ng+Nc-2 ; 
 temp_2D_mesh = zeros(N,M);
 z = [-H/2:dz:H/2]';
 % compute the radial temperature distribution for each z
 for j = 1:length(z)
-    Q = rad_heat_gen(r,Qscl,z(j),H,Rf,Rm,Dm,Df,Lf,Lm,S0);
-    TCO = cladding_outer(z(j),pi*r_f^2,Q,r_c,mdot,CPW,h_cool,T_cool,H);
-    [T , r] = radial_solver(Q,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc);
+    Q = vol_heat_gen(Q_vec,z(j),H);
+    TCO = cladding_outer(z(j),pi*r_f^2,Q(Nf),r_c,mdot,CPW,h_cool,T_cool,H);
+    [T , r] = radial_solver(Q,LHR,TCO,r_f,r_g,r_c,k_f,k_g,k_c,Nf,Ng,Nc);
     temp_2D_mesh(:,j) = T
 end
 
-save('fine_mesh_HW7')
+save('FINAL_scratchTEX')

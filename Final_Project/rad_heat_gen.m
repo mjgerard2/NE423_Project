@@ -11,6 +11,5 @@ function Q = rad_heat_gen(r, Qscl, H, Rf, Rm, Dm, Df, Lf, Lm, S0)
     zeta = ((Lm * Lm) / (Dm * besseli(0,Rf_Lf))) * ((numer / denom) + 1);
     
     phi = zeta * S0 * besseli(0, r / Lf);
-    Q = Qscl * phi % * cos(z.*pi./H);
-    %Q = Qmax*cos(z.*pi./H);
+    Q = Qscl * phi;
 end
